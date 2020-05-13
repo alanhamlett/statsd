@@ -253,7 +253,7 @@ config.configFile(process.argv[2], function (config) {
           l.log(metrics[midx].toString());
         }
 
-        let bits = metrics[midx].toString().split('#');
+        let bits = metrics[midx].toString().split('|#');
         let tags = null;
         if (bits.length > 1) {
           tags = bits[1];

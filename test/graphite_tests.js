@@ -377,5 +377,18 @@ module.exports = {
         });
       });
     });
+  },
+
+  dogstatsd_style_tags_supported: function(test) {
+    var me = this;
+    this.acceptor.once('connection', function(c) {
+      statsd_send('foo:250|c|#tagkey:tagval',me.sock,'127.0.0.1',8125,function(){
+        collect_for(me.acceptor, me.myflush * 2, function(strings){
+          var str = strings.join();
+          test.ok(str.indexOf('tagkey=tagval') !== -1, "DogStatsD-style tags not supported");
+          test.done();
+        });
+      });
+    });
   }
 }
