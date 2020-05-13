@@ -254,14 +254,16 @@ config.configFile(process.argv[2], function (config) {
         }
 
         let bits = metrics[midx].toString().split('|#');
-        let tags = null;
-        if (bits.length > 1) {
-          tags = bits[1];
+        let tags = [];
+        if (bits.length > 1 && bits[1].length > 0) {
+          tags = bits[1].split(',');
         }
         bits = bits[0].split(':');
         let key = bits.shift();
-        if (tags) {
-          key += ';' + tags.replace(',',';').replace(':','=');
+        if (tags.length > 0) {
+          key += ';' + tags.map(function(tag) {
+            return tag.replace(';', '_').replace(':', '=');
+          }).join(';');
         }
         key = sanitizeKeyName(key);
 
